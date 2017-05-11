@@ -1,7 +1,3 @@
-CREATE VIEW f AS
-SELECT XMLELEMENT(NAME "Alla", XMLAGG(XMLELEMENT(NAME "Förlag", XMLATTRIBUTES(name AS "Namn", country AS "Land")))) AS "Publishers"
-FROM publisher
-
 SELECT XMLELEMENT(NAME "Resultat",(XMLQUERY('for $forlag in $f//Förlag
 					     let $sprak := for $s in distinct-values($t//Translation[@Publisher = $forlag/@Namn]/@Language)
 							   return element Språk {$s}
