@@ -1,8 +1,7 @@
-SELECT XMLELEMENT(NAME "Resultat", XMLAGG(XMLELEMENT(NAME "Förlag", XMLATTRIBUTES(name AS "namn", country AS "land"),
-													 XMLELEMENT(NAME "Språk", 
-													(SELECT s."sprak"
-													 FROM edition, XMLTABLE('$TRANSLATIONS//Translation' 
-													 			   COLUMNS "sprak" VARCHAR(25) PATH '@Language',
-																	   "forlag" VARCHAR(25) PATH '@Publisher') AS s
-													 WHERE s."forlag" = publisher.name)))))
-FROM publisher
+SELECT XMLELEMENT(NAME "FÃ¶rlag", XMLATTRIBUTES(name AS "namn", country AS "land"),
+	XMLAGG(XMLELEMENT(NAME "SprÃ¥k", "sprak")))
+FROM publisher, edition, XMLTABLE('$TRANSLATIONS//Translation[not(@Language = .)]' 
+						 COLUMNS "sprak" VARCHAR(25) PATH '@Language',
+								 "forlag" VARCHAR(25) PATH '@Publisher') AS s
+WHERE "forlag" = publisher.name
+GROUP BY name, country;
