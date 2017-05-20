@@ -1,21 +1,21 @@
-SELECT title AS "Titel", originallanguage AS "Originalspråk", genre AS "Genre",
+SELECT title AS "Titel", originallanguage AS "OriginalsprÃ¥k", genre AS "Genre",
 	  (SELECT COUNT(*)
 	   FROM edition
 	   WHERE book = book.id) AS "AntalUpplagor",
-	  (SELECT COUNT(DISTINCT "sprak")
-	   FROM edition,XMLTABLE('$TRANSLATIONS//Translation' COLUMNS "sprak" VARCHAR(25) PATH '@Language') AS s
-	   WHERE book = book.id) AS "AntalSpråk",
+	  (SELECT COUNT(DISTINCT sprak)
+	   FROM edition,XMLTABLE('$TRANSLATIONS//Translation' COLUMNS sprak VARCHAR(25) PATH '@Language') AS s
+	   WHERE book = book.id) AS "AntalSprÃ¥k",
 	   (SELECT COUNT(DISTINCT id)
 	    FROM author
 	    WHERE id IN(SELECT author
 	    			FROM authorship
 	    			WHERE book IN (SELECT book.id
 	    						   FROM edition
-	    						   WHERE book = book.id))) AS "AntalFörfattare",
+	    						   WHERE book = book.id))) AS "AntalFÃ¶rfattare",
 	   (SELECT year
 	    FROM edition
 	    WHERE book = book.id
 	    ORDER BY year ASC
-	    LIMIT 1) AS "År"
+	    LIMIT 1) AS "Ã…r"
 FROM book
 	   
