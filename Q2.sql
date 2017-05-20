@@ -1,9 +1,9 @@
 SELECT XMLELEMENT(NAME "Resultat", XMLAGG(xt))
-FROM (SELECT XMLELEMENT(NAME "Förlag",XMLATTRIBUTES(name AS "Namn", country AS "Land"),
+FROM (SELECT XMLELEMENT(NAME "FÃ¶rlag",XMLATTRIBUTES(name AS "Namn", country AS "Land"),
 			 XMLAGG(XMLELEMENT(NAME "Bok", XMLATTRIBUTES(title AS "Titel", genre AS "Genre")))) AS xt
 FROM publisher, book
-WHERE publisher.name IN (SELECT pub."publisher"
+WHERE publisher.name IN (SELECT pub.publisher
 					   FROM edition, XMLTABLE('distinct-values($TRANSLATIONS//Translation/@Publisher)' 
-					   				 COLUMNS "publisher" VARCHAR(25) PATH 'string()') AS pub
+					   				 COLUMNS publisher VARCHAR(25) PATH 'string()') AS pub
 					   WHERE book.id = edition.book)
 GROUP BY name, country);
